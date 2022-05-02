@@ -22,7 +22,7 @@ public class TrackerTest {
         Item second = new Item("Second");
         tracker.add(first);
         tracker.add(second);
-        Item result = tracker.findAll(tracker.getItems())[0];
+        Item result = tracker.findAll()[0];
         assertThat(result.getName(), is(first.getName()));
     }
 

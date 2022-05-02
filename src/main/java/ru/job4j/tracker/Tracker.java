@@ -39,7 +39,7 @@ public class Tracker {
         return Arrays.copyOf(result, count);
     }
 
-    public Item[] findAll(Item[] items) {
+    public Item[] findAll() {
         Item[] result = new Item[size];
         int count = 0;
         for (int i = 0; i < size; i++) {
