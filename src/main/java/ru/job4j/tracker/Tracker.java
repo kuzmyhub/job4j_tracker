@@ -20,8 +20,11 @@ public class Tracker {
 
     public boolean replace(int id, Item item) {
         boolean rsl = false;
-        if (indexOf(id) != -1) {
-            items[indexOf(id)].setName(item.getName());
+        int index = indexOf(id);
+        if (index != -1) {
+            int saveId = items[index].getId();
+            items[index] = item;
+            items[index].setId(saveId);
             rsl = true;
         }
         return rsl;
@@ -60,9 +63,5 @@ public class Tracker {
     public Item findById(int id) {
         int index = indexOf(id);
         return index != -1 ? items[index] : null;
-    }
-
-    public Item[] getItems() {
-        return items;
     }
 }
