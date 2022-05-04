@@ -101,4 +101,42 @@ public class TrackerTest {
         Item expected = new Item("Take a bag");
         assertThat(created.getName(), is(expected.getName()));
     }
+
+    @Test
+    public void whenEditItemNewItem() {
+        Tracker tracker = new Tracker();
+        Item item = new Item("new item");
+        tracker.add(item);
+        String[] answers = {
+                String.valueOf(item.getId()),
+                "edited item"
+        };
+        StartUI.editItem(new StubInput(answers), tracker);
+        Item edited = tracker.findById(item.getId());
+        assertThat(edited.getName(), is("edited item"));
+    }
+
+    @Test
+    public void whenEditItemTest() {
+        Tracker tracker = new Tracker();
+        Item item = new Item("test");
+        tracker.add(item);
+        String[] answers = {
+                String.valueOf(item.getId()),
+                "edited item"
+        };
+        StartUI.editItem(new StubInput(answers), tracker);
+        Item edited = tracker.findById(item.getId());
+        assertThat(edited.getName(), is("edited item"));
+    }
+
+    @Test
+    public void whenDeleteItemTest() {
+        Tracker tracker = new Tracker();
+        Item item = new Item();
+        tracker.add(item);
+        String[] answer = {String.valueOf(item.getId())};
+        StartUI.deleteItem(new StubInput(answer), tracker);
+        assertThat(tracker.findById(item.getId()), is(nullValue()));
+    }
 }
