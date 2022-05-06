@@ -9,11 +9,16 @@ public class StartUI {
         this.out = out;
     }
 
-    public void init(Input input, Tracker tracker, UserAction[] actions) {
+    public void init(Input input, Tracker tracker, UserAction[] actions, Validate validate) {
         boolean run = true;
         while (run) {
             this.showMenu(actions);
-            int select = input.askInt("Select: ");
+            int select = validate.askInt("Select: ");
+            if (select < 0 || select >= actions.length) {
+                out.println("Wrong input, you can select: 0 ... "
+                        + (actions.length - 1));
+                continue;
+            }
             UserAction action = actions[select];
             run = action.execute(input, tracker);
         }
@@ -30,6 +35,7 @@ public class StartUI {
         Output output = new ConsoleOutput();
         Input input = new ConsoleInput();
         Tracker tracker = new Tracker();
+        Validate validate = new Validate();
         UserAction[] actions = {
                 new CreateAction(output),
                 new ShowAction(output),
@@ -39,6 +45,6 @@ public class StartUI {
                 new FindByNameAction(output),
                 new ExitAction()
         };
-        new StartUI(output).init(input, tracker, actions);
+        new StartUI(output).init(input, tracker, actions, validate);
     }
 }
