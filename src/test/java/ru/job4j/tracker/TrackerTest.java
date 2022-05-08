@@ -296,10 +296,12 @@ public class TrackerTest {
         );
         ValidateInput input = new ValidateInput(out, in);
         String values = "";
-        for (int i = 0; i < 3; i++) {
-            int selected = input.askInt("Select: ");
-            values += String.valueOf(selected);
-        }
+        int selected = input.askInt("Select: ");
+        values += String.valueOf(selected);
+        selected = input.askInt("Select: ");
+        values += String.valueOf(selected);
+        selected = input.askInt("Select: ");
+        values += String.valueOf(selected);
         int rsl = Integer.parseInt(values);
         assertThat(rsl, is(123));
     }
