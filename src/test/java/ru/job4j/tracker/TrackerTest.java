@@ -265,4 +265,53 @@ public class TrackerTest {
                 )
         );
     }
+
+    @Test
+    public void whenInvalidInput() {
+        Output out = new StubOutput();
+        Input in = new StubInput(
+                new String[] {"one", "1"}
+        );
+        ValidateInput input = new ValidateInput(out, in);
+        int selected = input.askInt("Select: ");
+        assertThat(selected, is(1));
+    }
+
+    @Test
+    public void whenValidInput() {
+        Output out = new StubOutput();
+        Input in = new StubInput(
+                new String[] {"2"}
+        );
+        ValidateInput input = new ValidateInput(out, in);
+        int selected = input.askInt("Select: ");
+        assertThat(selected, is(2));
+    }
+
+    @Test
+    public void whenAllValidInput() {
+        Output out = new StubOutput();
+        Input in = new StubInput(
+                new String[] {"1", "2", "3"}
+        );
+        ValidateInput input = new ValidateInput(out, in);
+        String values = "";
+        for (int i = 0; i < 3; i++) {
+            int selected = input.askInt("Select: ");
+            values += String.valueOf(selected);
+        }
+        int rsl = Integer.parseInt(values);
+        assertThat(rsl, is(123));
+    }
+
+    @Test
+    public void whenMinusInvalidInput() {
+        Output out = new StubOutput();
+        Input in = new StubInput(
+                new String[] {"-2"}
+        );
+        ValidateInput input = new ValidateInput(out, in);
+        int selected = input.askInt("Select: ");
+        assertThat(selected, is(-2));
+    }
 }
