@@ -1,0 +1,49 @@
+package ru.job4j.collection;
+
+import org.junit.Test;
+import java.util.Arrays;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
+import static org.junit.Assert.*;
+
+public class ConvertList2ArrayTest {
+    @Test
+    public void when7ElementsThen9() {
+        int[][] result = ConvertList2Array.toArray(
+                Arrays.asList(1, 2, 3, 4, 5, 6, 7),
+                3
+        );
+        int[][] expect = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 0, 0}
+        };
+        assertThat(result, is(expect));
+    }
+
+    @Test
+    public void when5ElementsThen6() {
+        int[][] result = ConvertList2Array.toArray(
+                Arrays.asList(1, 2, 3, 4, 5),
+                2
+        );
+        int[][] expect = {
+                {1, 2},
+                {3, 4},
+                {5, 0}
+        };
+        assertThat(result, is(expect));
+    }
+
+    @Test
+    public void when10ElementsThen4() {
+        int [][] result = ConvertList2Array.toArray(
+                Arrays.asList(1, 2, 3, 6, 9, 18, 20, 21, 32, 58), 3);
+        int [][] expect = {{1, 2, 3},
+                {6, 9, 18},
+                {20, 21, 32},
+                {58, 0, 0}};
+        assertThat(result, is(expect));
+    }
+}
