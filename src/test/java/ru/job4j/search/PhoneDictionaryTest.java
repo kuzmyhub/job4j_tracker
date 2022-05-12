@@ -23,7 +23,7 @@ public class PhoneDictionaryTest {
     public void whenFindByNameThenNothing() {
         PhoneDictionary phones = new PhoneDictionary();
         phones.add(
-                new Person("Petr", "Arsentev", "534892", "Bryansk")
+                new Person("Oleg", "Arsentev", "534892", "Bryansk")
         );
         ArrayList<Person> persons = phones.find("line");
         assertTrue(persons.isEmpty());
