@@ -38,9 +38,9 @@ public class ConvertList2ArrayTest {
 
     @Test
     public void when10ElementsThen4() {
-        int [][] result = ConvertList2Array.toArray(
+        int[][] result = ConvertList2Array.toArray(
                 Arrays.asList(1, 2, 3, 6, 9, 18, 20, 21, 32, 58), 3);
-        int [][] expect = {{1, 2, 3},
+        int[][] expect = {{1, 2, 3},
                 {6, 9, 18},
                 {20, 21, 32},
                 {58, 0, 0}};
