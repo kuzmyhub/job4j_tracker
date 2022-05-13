@@ -138,7 +138,7 @@ public class TrackerTest {
         Input in = new StubInput(
                 new String[] {"0", String.valueOf(item.getId()), "1"}
         );
-        List<UserAction> actions = Arrays.asList (
+        List<UserAction> actions = Arrays.asList(
                 new DeleteAction(out),
                 new ExitAction()
         );
