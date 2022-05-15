@@ -29,4 +29,16 @@ public class OrderConvertTest {
         HashMap<String, Order> map = OrderConvert.process(orders);
         assertThat(map.get("j4uj"), is(new Order("j4uj", "Shorts")));
     }
+
+    @Test
+    public void whenFourOrdersAndTwoDuplicateThen() {
+        List<Order> orders = new ArrayList<>(Arrays.asList(
+                new Order("56g4", "Note"),
+                new Order("56g4", "Note"),
+                new Order("94kg", "Boots"),
+                new Order("94kg", "Boots")
+        ));
+        HashMap<String, Order> map = OrderConvert.process(orders);
+        assertThat(map.size(), is(2));
+    }
 }
