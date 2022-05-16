@@ -1,9 +1,7 @@
 package ru.job4j.tracker;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -317,5 +315,41 @@ public class TrackerTest {
         ValidateInput input = new ValidateInput(out, in);
         int selected = input.askInt("Select: ");
         assertThat(selected, is(-2));
+    }
+
+    @Test
+    public void whenSortByAsc() {
+        List<Item> items = new ArrayList<>(Arrays.asList(
+                new Item("Задача"),
+                new Item("Удача"),
+                new Item("Подача"),
+                new Item("Неудача")
+        ));
+        List<Item> expected = new ArrayList<>(Arrays.asList(
+                new Item("Задача"),
+                new Item("Неудача"),
+                new Item("Подача"),
+                new Item("Удача")
+        ));
+        Collections.sort(items, new ItemAscByName());
+        assertThat(expected, is(items));
+    }
+
+    @Test
+    public void whenSortByDesc() {
+        List<Item> items = new ArrayList<>(Arrays.asList(
+                new Item("Задача"),
+                new Item("Удача"),
+                new Item("Подача"),
+                new Item("Неудача")
+        ));
+        List<Item> expected = new ArrayList<>(Arrays.asList(
+                new Item("Удача"),
+                new Item("Подача"),
+                new Item("Неудача"),
+                new Item("Задача")
+        ));
+        Collections.sort(items, new ItemDescByName());
+        assertThat(expected, is(items));
     }
 }
