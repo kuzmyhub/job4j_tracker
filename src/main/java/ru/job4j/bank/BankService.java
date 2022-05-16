@@ -6,20 +6,16 @@ public class BankService {
     private final Map<User, List<Account>> users = new HashMap<>();
 
     public void addUser(User user) {
-        if (!users.containsKey(user)) {
-            users.put(user, new ArrayList<Account>());
-        } else {
-            System.out.println("Пользователь уже есть в базе");
-        }
+        users.putIfAbsent(user, new ArrayList<Account>());
     }
 
     public void addAccount(String passport, Account account) {
         User user = findByPassport(passport);
-        if (!users.get(user).contains(account)) {
-            users.get(user).add(account);
-            System.out.println("Аккаунт добавлен");
-        } else {
-            System.out.println("У пользователья есть такой аккаунт");
+        if (user != null) {
+            List<Account> accounts = users.get(user);
+            if (!accounts.contains(account)) {
+                accounts.add(account);
+            }
         }
     }
 
@@ -52,18 +48,15 @@ public class BankService {
                                  String destPassport, String destRequisite, double amount) {
         boolean rsl = false;
         Account srcAccount = findByRequisite(srcPassport, srcRequisite);
-        User user = findByPassport(destPassport);
         Account destAccount = findByRequisite(destPassport, destRequisite);
         if (srcAccount != null
-                && srcAccount.getBalance() >= amount
-                && user != null) {
-            srcAccount.setBalance(srcAccount.getBalance() - amount);
-            if (destAccount != null) {
+                && destAccount != null) {
+            double srcBalance = srcAccount.getBalance();
+            if (srcBalance >= amount) {
+                srcAccount.setBalance(srcBalance - amount);
                 destAccount.setBalance(destAccount.getBalance() + amount);
-            } else {
-                users.get(user).add(new Account(destRequisite, amount));
+                rsl = true;
             }
-            rsl = true;
         }
         return rsl;
     }
