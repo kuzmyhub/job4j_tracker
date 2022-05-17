@@ -73,7 +73,7 @@ public class StringCompareTest {
         StringCompare compare = new StringCompare();
         int rst = compare.compare(
                 "Krasnov",
-                "Shyrko"
+                "Shyko"
         );
         assertThat(rst, lessThan(0));
     }
