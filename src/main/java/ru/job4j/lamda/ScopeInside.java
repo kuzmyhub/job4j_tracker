@@ -1,4 +1,4 @@
-package ru.job4j.function;
+package ru.job4j.lamda;
 
 import java.util.function.Supplier;
 
@@ -6,8 +6,8 @@ public class ScopeInside {
     public static void main(String[] args) {
         int[] number = {1, 2, 3};
         int total = 0;
-        for (int i = 0; i < number.length; i++) {
-            int num = number[i];
+        for (int n : number) {
+            int num = n;
             int value = total;
             total = add(
                     () -> value + num
