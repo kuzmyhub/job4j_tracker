@@ -15,7 +15,7 @@ public class LambdaUsage {
         );
         Comparator<String> comparator = (left, right) -> {
             System.out.println("compare - "
-                    + right.length() + " : " + left.length());
+                    + left.length() + " : " + right.length());
             return Integer.compare(right.length(), left.length());
         };
         strings.sort(comparator);
