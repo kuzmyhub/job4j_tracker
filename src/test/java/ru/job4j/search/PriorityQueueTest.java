@@ -12,21 +12,21 @@ import static org.junit.Assert.assertThat;
 public class PriorityQueueTest {
     @Test
     public void whenHigherPriorityThenUrgent() {
-        PriorityQueue queue = new PriorityQueue();
+        var queue = new PriorityQueue();
         queue.put(new Task("low", 5));
         queue.put(new Task("urgent", 1));
         queue.put(new Task("middle", 3));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("urgent"));
     }
 
     @Test
     public void whenHigherPriorityThenTop() {
-        PriorityQueue queue = new PriorityQueue();
+        var queue = new PriorityQueue();
         queue.put(new Task("mid", 1));
         queue.put(new Task("bot", 2));
         queue.put(new Task("mid", 0));
-        Task result = queue.take();
+        var result = queue.take();
         assertThat(result.getDesc(), is("mid"));
     }
 }

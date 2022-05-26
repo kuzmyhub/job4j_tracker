@@ -20,7 +20,7 @@ public class PhoneDictionary {
                 or(surnameContains.
                         or(phoneContains.
                                 or(addressContains)));
-        for (Person value : persons) {
+        for (var value : persons) {
             if (prCombine.test(value)) {
                 result.add(value);
             }
