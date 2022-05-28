@@ -47,7 +47,7 @@ public class BankService {
      * типа HashMap полльзователь с таким же номером паспорта.
      * @param passport номер паспорта пользователя
      * @return В зависимости от результата возвращает объект
-     * типа {@linl User} или null;
+     * типа {@link User} или null;
      */
     public User findByPassport(String passport) {
         return users.keySet()
