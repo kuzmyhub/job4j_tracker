@@ -52,19 +52,14 @@ public class BankService {
      * типа {@link User} или null;
      */
     public Optional<User> findByPassport(String passport) {
-        Optional<User> rsl = Optional.empty();
-        Optional<User> user = users.keySet().stream()
+        return users.keySet().stream()
                 .filter(u -> u.getPassport().equals(passport))
                 .findFirst();
-        if (user.isPresent()) {
-            return user;
-        }
-        return rsl;
     }
 
     /**
      *
-     * Метод принимает навход номер паспорта пользователя и
+     * Метод принимает на вход номер паспорта пользователя и
      * номер его банковского счёта. Если такой пользователь
      * существует, циклом {@code for} проверяет существует ли
      * у данного пользователя банковский счёт с подобными номером
@@ -76,11 +71,10 @@ public class BankService {
      */
     public Optional<Account> findByRequisite(String passport, String requisite) {
         Optional<User> user = findByPassport(passport);
-        Optional<Account> rsl = Optional.empty();
-        return user.map(value -> users.get(value)
+        return user.flatMap(value -> users.get(value)
                 .stream()
                 .filter(a -> a.getRequisite().equals(requisite))
-                .findFirst()).orElse(rsl);
+                .findFirst());
     }
 
     /**
