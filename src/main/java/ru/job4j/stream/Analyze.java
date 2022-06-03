@@ -16,7 +16,8 @@ public class Analyze {
         return stream
                 .flatMap(a -> a.getSubjects().stream())
                 .mapToInt(Subject::getScore)
-                .average().orElse(0D);
+                .average()
+                .orElse(0D);
     }
 
     public static List<Tuple> averageScoreBySubject(Stream<Pupil> stream) {
@@ -25,7 +26,8 @@ public class Analyze {
                         a.getSubjects().stream()
                                 .mapToInt(Subject::getScore)
                                 .average()
-                                .orElse(0D)))).collect(Collectors.toList());
+                                .orElse(0D))))
+                .collect(Collectors.toList());
     }
 
     public static List<Tuple> averageScoreByPupil(Stream<Pupil> stream) {
