@@ -13,11 +13,11 @@ public class EditAction implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, MemTracker memTracker) {
+    public boolean execute(Input input, Store store) {
         int id = input.askInt("Enter item: ");
         String name = input.askStr("Enter name: ");
         Item item = new Item(name);
-        if (memTracker.replace(id, item)) {
+        if (store.replace(id, item)) {
             out.println("Заявка изменена успешно.");
         } else {
             out.println("Ошибка замены заявки.");
