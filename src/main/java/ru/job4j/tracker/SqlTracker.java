@@ -40,7 +40,7 @@ public class SqlTracker implements Store, AutoCloseable {
     @Override
     public Item add(Item item) {
         try (PreparedStatement statement
-                     = cn.prepareStatement("insert into tracker(name, created) values(?, ?);")) {
+                     = cn.prepareStatement("insert into items(name, created) values(?, ?);")) {
             statement.setString(1, item.getName());
             Timestamp timestampFromLDT = Timestamp.valueOf(item.getCreated());
             statement.setTimestamp(2, timestampFromLDT);
@@ -55,7 +55,7 @@ public class SqlTracker implements Store, AutoCloseable {
     public boolean replace(int id, Item item) {
         boolean rsl = false;
         try (PreparedStatement statement
-                     = cn.prepareStatement("update tracker set name = ?, created = ? where id = ?;")) {
+                     = cn.prepareStatement("update items set name = ?, created = ? where id = ?;")) {
             statement.setString(1, item.getName());
             Timestamp timestampFromLDT = Timestamp.valueOf(item.getCreated());
             statement.setTimestamp(2, timestampFromLDT);
@@ -71,7 +71,7 @@ public class SqlTracker implements Store, AutoCloseable {
     public boolean delete(int id) {
         boolean rsl = false;
         try (PreparedStatement statement
-                     = cn.prepareStatement("delete from tracker where id = ?;")) {
+                     = cn.prepareStatement("delete from items where id = ?;")) {
             statement.setInt(1, id);
             statement.execute();
             rsl = statement.executeUpdate() > 0;
@@ -84,7 +84,7 @@ public class SqlTracker implements Store, AutoCloseable {
     @Override
     public List<Item> findAll() {
         try (PreparedStatement statement
-                     = cn.prepareStatement("select id, name, created from tracker;")) {
+                     = cn.prepareStatement("select id, name, created from items;")) {
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 items.add(getItem(resultSet));
@@ -99,7 +99,7 @@ public class SqlTracker implements Store, AutoCloseable {
     public List<Item> findByName(String key) {
         List<Item> result = new ArrayList<>();
         try (PreparedStatement statement
-                     = cn.prepareStatement("select id, name, created from tracker where name = ?;")) {
+                     = cn.prepareStatement("select id, name, created from items where name = ?;")) {
             statement.setString(1, key);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -115,7 +115,7 @@ public class SqlTracker implements Store, AutoCloseable {
     public Item findById(int id) {
         Item item = null;
         try (PreparedStatement statement =
-                     cn.prepareStatement("select id, name, created from tracker where id = ?;")) {
+                     cn.prepareStatement("select id, name, created from items where id = ?;")) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
