@@ -16,8 +16,8 @@ public class SqlTracker implements Store, AutoCloseable {
     public SqlTracker() {
     }
 
-    public SqlTracker(Connection connection) {
-        this.cn = connection;
+    public SqlTracker(Connection cn) {
+        this.cn = cn;
     }
 
     public void init() {
@@ -39,7 +39,7 @@ public class SqlTracker implements Store, AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        if (cn !=null) {
+        if (cn != null) {
             cn.close();
         }
     }
