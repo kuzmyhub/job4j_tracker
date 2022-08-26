@@ -4,17 +4,17 @@
 показало, что количество экземпляров классов в данный момент стоит на отметке 61145 шт.,
 а количество занимаемой памяти 4699880 байт.
 
-![jmap1](Profiling/jmap_before_add_1.png)
+![jmap1](jmap_before_add_1.png)
 
-![jmap2](Profiling/jmap_before_add_2.png)
+![jmap2](jmap_before_add_2.png)
 
 После добавления в трекер заявок в количестве 100000 шт. использование
 утилиты jmap показало, что количество экземпляров классов стоит на
 отметке 677681 шт., а количество занимаемой памяти 18373024 байт.
 
-![jmap3](Profiling/jmap_after_add_1.png)
+![jmap3](jmap_after_add_1.png)
 
-![jmap4](Profiling/jmap_after_add_2.png)
+![jmap4](jmap_after_add_2.png)
 
 Если посмотреть на первые строчки логов, то можно заметить,
 что появилось ~100000 шт. новых экземпляров классов java.base,
@@ -33,11 +33,11 @@ java.time.LocalTime (String, LocalDateTime, LocalDate, LocalTime
 
 До запуска:
 
-![jstat1](Profiling/jstat_before_add.png)
+![jstat1](jstat_before_add.png)
 
 После запуска:
 
-![jstat2](Profiling/jstat_after_add.png)
+![jstat2](jstat_after_add.png)
 
 Изменения показателей, который вызывают наибольший интерес:
 
@@ -57,12 +57,12 @@ GCT – общее время, затрачиваемое на сборку му
 #jconsole
 Графики после запуска приложения:
 
-![jconsole1](Profiling/jconsole_start.png)
+![jconsole1](jconsole_start.png)
 
 При добавлении 500000 тысяч заявок появляется скачок на графиках
 Heap Memory Usage, Classes, CPU Usage.
 
-![jconsole2](Profiling/jconsole_add_all.png)
+![jconsole2](jconsole_add_all.png)
 
 Это связано с инициализацией большого количество объекта.
 Данная операция заполняет кучу объектами, создаются объекты типа Item,
@@ -73,10 +73,10 @@ String, LocalDateTime, LocalDate, LocalTime, как было вяснено пр
 так как для вывода всех заявок создаётся копия массива заявок,
 а так же запускается цикл для их вывода.
 
-![jconsole3](Profiling/jconsole_show_all.png)
+![jconsole3](jconsole_show_all.png)
 
 При удалении всех 500000 заявок скачок возникает в результате
 проверки индекса методом приложения и методом списка в котором
 находятся заявки.
 
-![jconsole4](Profiling/jconsole_delete_all.png)
+![jconsole4](jconsole_delete_all.png)
