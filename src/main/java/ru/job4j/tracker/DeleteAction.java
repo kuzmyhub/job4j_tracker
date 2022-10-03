@@ -18,7 +18,7 @@ public class DeleteAction implements UserAction {
         if (store.delete(id)) {
             out.println("Заявка удалена успешно.");
         } else {
-            out.println("Гшибка удаления заявки");
+            out.println("Ошибка удаления заявки.");
         }
         return true;
     }

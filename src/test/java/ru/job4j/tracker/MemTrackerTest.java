@@ -1,12 +1,17 @@
 package ru.job4j.tracker;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import net.bytebuddy.asm.Advice;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 public class MemTrackerTest {
     @Test
@@ -349,5 +354,99 @@ public class MemTrackerTest {
         ));
         Collections.sort(items, new ItemDescByName());
         assertThat(expected, is(items));
+    }
+
+    @Test
+    public void whenDeleteItemStubByMockito() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Deleted item"));
+        Input input = mock(Input.class);
+        DeleteAction deleteAction = new DeleteAction(out);
+        when(input.askInt(any(String.class))).thenReturn(1);
+        deleteAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is("Заявка удалена успешно." + ln));
+    }
+
+    @Test
+    public void whenNotDeleteItemStubByMockito() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Deleted item"));
+        Input input = mock(Input.class);
+        DeleteAction deleteAction = new DeleteAction(out);
+        when(input.askInt(any(String.class))).thenReturn(2);
+        deleteAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is("Ошибка удаления заявки." + ln));
+    }
+
+    @Test
+    public void whenFinByIdStubByMockito() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Wanted item"));
+        Input input = mock(Input.class);
+        FindByIdAction findByIdAction = new FindByIdAction(out);
+        when(input.askInt(any(String.class))).thenReturn(1);
+        findByIdAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "dd-MMMM-EEEE-yyyy HH:mm:ss"
+        );
+        assertThat(out.toString(), is(
+                "id: 1, name: Wanted item, created: "
+                        + LocalDateTime.now().format(formatter)
+                        + ln
+        ));
+    }
+
+    @Test
+    public void whenNotFinByIdStubByMockito() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Wanted item"));
+        Input input = mock(Input.class);
+        int inId = 2;
+        FindByIdAction findByIdAction = new FindByIdAction(out);
+        when(input.askInt(any(String.class))).thenReturn(2);
+        findByIdAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is("Заявка с введённым id: "
+                + inId + " не найдена." + ln));
+    }
+
+    @Test
+    public void whenFindByNameAction() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Wanted item"));
+        Input input = mock(Input.class);
+        FindByNameAction findByNameAction = new FindByNameAction(out);
+        String wantedItemName = "Wanted item";
+        when(input.askStr(any(String.class))).thenReturn(wantedItemName);
+        findByNameAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "dd-MMMM-EEEE-yyyy HH:mm:ss"
+        );
+        assertThat(out.toString(), is("id: 1, name: Wanted item, created: "
+                + LocalDateTime.now().format(formatter) + ln));
+    }
+
+    @Test
+    public void whenNotFindByNameAction() {
+        Output out = new StubOutput();
+        MemTracker memTracker = new MemTracker();
+        memTracker.add(new Item("Item"));
+        Input input = mock(Input.class);
+        FindByNameAction findByNameAction = new FindByNameAction(out);
+        String wantedItemName = "Wanted item";
+        when(input.askStr(any(String.class))).thenReturn(wantedItemName);
+        findByNameAction.execute(input, memTracker);
+        String ln = System.lineSeparator();
+        assertThat(out.toString(), is("Заявки с именем "
+                + wantedItemName + " не найдены." + ln));
     }
 }
