@@ -52,7 +52,9 @@ public class StartUI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-         */
+        */
+
+        /*
         MemTracker store = new MemTracker();
         List<UserAction> actions = Arrays.asList(
                 new CreateAction(output),
@@ -64,6 +66,19 @@ public class StartUI {
                 new ExitAction(),
                 new AddManyApplication(output),
                 new DeleteManyApplication(output)
+        );
+        new StartUI(output).init(input, store, actions);
+        */
+
+        HbmTracker store = new HbmTracker();
+        List<UserAction> actions = Arrays.asList(
+                new CreateAction(output),
+                new ShowAction(output),
+                new EditAction(output),
+                new DeleteAction(output),
+                new FindByIdAction(output),
+                new FindByNameAction(output),
+                new ExitAction()
         );
         new StartUI(output).init(input, store, actions);
     }
