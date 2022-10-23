@@ -7,7 +7,6 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import javax.persistence.Query;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class HbmTracker implements Store, AutoCloseable{
@@ -36,38 +35,38 @@ public class HbmTracker implements Store, AutoCloseable{
 
     @Override
     public boolean replace(int id, Item item) {
+        int rsl = 0;
         Session session = getSession();
-        boolean rsl = false;
         try {
-            session.createQuery(
+            rsl = session.createQuery(
                     "UPDATE Item SET name = :fName WHERE id = :fId"
                     )
                     .setParameter("fName", item.getName())
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
-            rsl = true;
+            session.close();
         } catch (Exception e) {
             session.getTransaction().rollback();
         }
-        return rsl;
+        return rsl > 0;
     }
 
     @Override
     public boolean delete(int id) {
         Session session = getSession();
-        boolean rsl = false;
+        int rsl = 0;
         try {
             session.beginTransaction();
-            session.createQuery("DELETE Item i WHERE i.id = :fId")
+            rsl = session.createQuery("DELETE Item i WHERE i.id = :fId")
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
-            rsl = true;
+            session.close();
         } catch (Exception e) {
             session.getTransaction().rollback();
         }
-        return rsl;
+        return rsl > 0;
     }
 
     @Override
@@ -87,17 +86,19 @@ public class HbmTracker implements Store, AutoCloseable{
                 "FROM Item i WHERE i.name LIKE :fName", Item.class
         );
         query.setParameter("fName", "%" + key + "%");
+        session.close();
         return query.getResultList();
     }
 
     @Override
     public Item findById(int id) {
         Session session = getSession();
-        return (Item) session.createQuery(
-                "FROM Item i WHERE i.id = :fId"
-                )
-                .setParameter("fId", id)
-                .getSingleResult();
+        Query query = session.createQuery(
+                        "FROM Item i WHERE i.id = :fId", Item.class
+        );
+        query.setParameter("fId", id);
+        session.close();
+        return (Item) query.getSingleResult();
     }
 
     @Override
