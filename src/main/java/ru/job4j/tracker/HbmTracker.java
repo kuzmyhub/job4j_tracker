@@ -86,8 +86,9 @@ public class HbmTracker implements Store, AutoCloseable{
                 "FROM Item i WHERE i.name LIKE :fName", Item.class
         );
         query.setParameter("fName", "%" + key + "%");
+        List list = query.getResultList();
         session.close();
-        return query.getResultList();
+        return list;
     }
 
     @Override
@@ -97,8 +98,9 @@ public class HbmTracker implements Store, AutoCloseable{
                         "FROM Item i WHERE i.id = :fId", Item.class
         );
         query.setParameter("fId", id);
+        Item item = (Item) query.getSingleResult();
         session.close();
-        return (Item) query.getSingleResult();
+        return item;
     }
 
     @Override
