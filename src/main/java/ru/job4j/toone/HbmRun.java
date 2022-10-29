@@ -11,21 +11,26 @@ import java.util.List;
 public class HbmRun {
     public static void main(String[] args) {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure()
-                .build();
+                .configure().build();
         try {
-            SessionFactory sf = new MetadataSources(registry)
-                    .buildMetadata()
-                    .buildSessionFactory();
+            SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
             var role = new Role();
             role.setName("ADMIN");
             create(role, sf);
             var user = new User();
-            user.setName("Admin Admin");
+            user.setName("Admin Admin Admin");
+            user.setMessengers(List.of(
+                    new UserMessenger(0, "tg", "@tg"),
+                    new UserMessenger(0, "wu", "@wu")
+            ));
             user.setRole(role);
             create(user, sf);
-            findAll(User.class, sf).forEach(System.out::println);
-        } catch (Exception e) {
+            var stored = sf.openSession()
+                    .createQuery("from User where id = :fId", User.class)
+                    .setParameter("fId", user.getId())
+                    .getSingleResult();
+            stored.getMessengers().forEach(System.out::println);
+        }  catch (Exception e) {
             e.printStackTrace();
         } finally {
             StandardServiceRegistryBuilder.destroy(registry);
@@ -43,12 +48,7 @@ public class HbmRun {
     public static <T> List<T> findAll(Class<T> cl, SessionFactory sf) {
         Session session = sf.openSession();
         session.beginTransaction();
-        List<T> list = session
-                .createQuery(
-                        "from " + cl.getName(),
-                        cl
-                )
-                .list();
+        List<T> list = session.createQuery("from " + cl.getName(), cl).list();
         session.getTransaction().commit();
         session.close();
         return list;
