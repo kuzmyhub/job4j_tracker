@@ -37,6 +37,7 @@ public class HbmTracker implements Store, AutoCloseable{
     public boolean replace(int id, Item item) {
         int rsl = 0;
         Session session = getSession();
+        session.beginTransaction();
         try {
             rsl = session.createQuery(
                     "UPDATE Item SET name = :fName WHERE id = :fId"
