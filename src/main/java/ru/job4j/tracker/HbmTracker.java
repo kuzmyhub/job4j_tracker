@@ -7,6 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HbmTracker implements Store, AutoCloseable{
@@ -72,12 +73,18 @@ public class HbmTracker implements Store, AutoCloseable{
 
     @Override
     public List<Item> findAll() {
+        List<Item> list;
         Session session = getSession();
-        session.beginTransaction();
-        List list = session.createQuery("FROM ru.job4j.tracker.Item", Item.class).list();
-        session.getTransaction().commit();
-        session.close();
-        return list;
+        try {
+            session.beginTransaction();
+            list = session.createQuery("FROM Item").list();
+            session.getTransaction().commit();
+            session.close();
+            return list;
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -107,5 +114,22 @@ public class HbmTracker implements Store, AutoCloseable{
     @Override
     public void close() throws Exception {
         StandardServiceRegistryBuilder.destroy(registry);
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sf;
+    }
+
+    public void delete() {
+        Session session = getSession();
+        try {
+            session.beginTransaction();
+            session.createQuery("DELETE Item")
+                    .executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        }
     }
 }
